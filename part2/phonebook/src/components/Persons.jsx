@@ -9,7 +9,8 @@ const Persons = ({ persons, setPersons, filter, pushAlert }) => {
     <div>
       {personsToShow.map(p =>
         <List
-            key={p.id} person={p}
+            key={p.id}
+            person={p}
             setPersons={setPersons}
             pushAlert={pushAlert}
         />

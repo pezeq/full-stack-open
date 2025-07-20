@@ -43,8 +43,6 @@ const Form = ({ persons, setPersons, pushAlert }) => {
                 console.error('Failed to update person:', error.message);
                 pushAlert(`Failed to update '${existingPerson.name}'`, "error");
             });
-
-        //return;
     };
 
     const createNewPerson = () => {
