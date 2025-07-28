@@ -1,3 +1,5 @@
+const Person = require('../models/person');
+
 const getInfo = (persons) => {
     const info = {
         contacts: persons.length,
@@ -17,11 +19,10 @@ const findPersonById = (req, persons) => {
 }
 
 const createPerson = (name, number) => {
-    const person = {
-        id: String(Math.floor(Math.random() * 10000)),
+    const person = new Person ({
         name: name,
         number: number
-    }
+    })
     console.log('New Person:', person);
 
     return person;
