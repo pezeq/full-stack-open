@@ -28,11 +28,11 @@ if (process.argv.length === 5) {
         mongoose.connection.close();
     });
 } else {
-    console.log('Phonebook:')
+    console.log('Phonebook:');
     Person.find({}).then(result => {
         result.forEach(p => {
             console.log(p);
-        })
+        });
         mongoose.connection.close();
     });
 }

@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 
 mongoose.connect(process.env.MONGODB_URI)
-    .then(result => {
-        console.log('Connected to MongoDB')
+    .then(() => {
+        console.log('Connected to MongoDB');
     })
     .catch(err => {
         console.log('Unnable to connect to MongoDB', err.message);
@@ -12,9 +12,9 @@ mongoose.connect(process.env.MONGODB_URI)
 
 const personSchema = new mongoose.Schema({
     name: {
-      type: String,
-      minLength: [3, 'Must be at least 3 characters long'],
-      required: true
+        type: String,
+        minLength: [3, 'Must be at least 3 characters long'],
+        required: true
     },
     number: {
         type: String,

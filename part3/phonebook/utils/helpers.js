@@ -1,3 +1,7 @@
+/**
+ * @Deprecated use Mongoose methods instead.
+ */
+
 const Person = require('../models/person');
 
 const getInfo = (persons) => {
@@ -8,7 +12,7 @@ const getInfo = (persons) => {
     console.log('Fetching info:', info);
 
     return info;
-}
+};
 
 const findPersonById = (req, persons) => {
     const id = req.params.id;
@@ -16,20 +20,20 @@ const findPersonById = (req, persons) => {
     console.log('Fetching person:', person);
 
     return person;
-}
+};
 
 const createPerson = (name, number) => {
     const person = new Person ({
         name: name,
         number: number
-    })
+    });
     console.log('New Person:', person);
 
     return person;
-}
+};
 
 module.exports = {
     getInfo,
     findPersonById,
     createPerson
-}
+};
