@@ -60,7 +60,7 @@ const Form = ({ persons, setPersons, pushAlert }) => {
         })
         .catch(error => {
             console.error('Failed to create new person:', error);
-            pushAlert(`Failed to create new ${newPerson.name}`, "error");
+            pushAlert(error.response.data.message, "error");
         });
     };
 
