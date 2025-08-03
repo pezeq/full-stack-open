@@ -5,13 +5,13 @@ const requestLogger = (req, res, next) => {
     logger.info('Path', req.path);
     logger.info('Body', req.body);
     next();
-}
+};
 
 const unknownEndpoint = (req, res) => {
-    res.status(404).json({ error: 'Unknown Endpoint' })
-}
+    res.status(404).json({ error: 'Unknown Endpoint' });
+};
 
 module.exports = {
     requestLogger,
     unknownEndpoint
-}
+};
