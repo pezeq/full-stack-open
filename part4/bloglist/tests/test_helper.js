@@ -1,4 +1,5 @@
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const blogs = [
     {
@@ -51,6 +52,13 @@ const blogs = [
     }
 ];
 
+const sampleBlog = {
+    author: 'Pedro Ezequiel',
+    title: 'Testing the backend is fun',
+    url: 'https://github.com/pezeq',
+    likes: 19
+};
+
 const getBlogs = async () => {
     const blogs = await Blog.find({});
     return blogs.map(b => b.toJSON());
@@ -68,8 +76,30 @@ const nonExistingId = async () => {
     return toBeDeleted._id.toString();
 };
 
+const getUsers = async () => {
+    const users = await User.find({});
+    return users.map(u => u.toJSON());
+};
+
+const getUserId = async (username) => {
+    const user = await User.findOne({ username });
+    return user ? user._id.toString() : null;
+};
+
+const findBlog = async () => {
+    const blogs = await getBlogs();
+    const userId = await getUserId('root');
+
+    const blog = blogs.find(b => b.user?.toString() === userId);
+    return blog || null;
+};
+
 module.exports = {
     blogs,
+    sampleBlog,
     getBlogs,
-    nonExistingId
+    nonExistingId,
+    getUsers,
+    getUserId,
+    findBlog
 };
