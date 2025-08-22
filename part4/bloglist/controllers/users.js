@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const userRouters = require('express').Router();
 const User = require('../models/user');
 const { asyncHandler } = require('../utils/middleware');
-const { checkUserAndPassword } = require('../utils/userService');
+const { checkUserAndPassword } = require('../utils/validators');
 
 userRouters.get('/', asyncHandler(async (req, res) => {
     const users = await User

@@ -1,8 +1,7 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const { asyncHandler, userExtractor } = require('../utils/middleware');
-const responses = require('../utils/responses');
-const { checkTitleURLandUser, checkUserAndBlog } = require('../utils/blogService')
+const { checkTitleURLandUser, checkUserAndBlog } = require('../utils/validators');
 
 blogsRouter.get('/', asyncHandler(async (req, res) => {
     const blogs = await Blog

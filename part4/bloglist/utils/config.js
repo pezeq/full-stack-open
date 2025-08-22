@@ -8,8 +8,14 @@ const PORT = process.env.PORT;
 
 const SECRET = process.env.SECRET;
 
+const ROOT_PW = process.env.ROOT_PW;
+
+const PEZEQ_PW = process.env.PEZEQ_PW;
+
 module.exports = {
     MONGODB_URI,
     PORT,
-    SECRET
+    SECRET,
+    ROOT_PW,
+    PEZEQ_PW
 };

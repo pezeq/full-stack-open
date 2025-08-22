@@ -5,13 +5,14 @@ const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
 const helper = require('./test_helper');
+const config = require('../utils/config')
 
 const api = supertest(app);
 
 const getToken = async () => {
     const user = {
         username: 'root',
-        password: 'admin123'
+        password: config.ROOT_PW
     };
 
     const res = await api
