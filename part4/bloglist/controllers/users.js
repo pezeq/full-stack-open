@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const userRouters = require('express').Router();
 const User = require('../models/user');
 const { asyncHandler } = require('../utils/middleware');
-const { checkUserAndPassword } = require('../utils/validators');
+const validators = require('../utils/validators');
 
 userRouters.get('/', asyncHandler(async (req, res) => {
     const users = await User
@@ -13,10 +13,9 @@ userRouters.get('/', asyncHandler(async (req, res) => {
 }));
 
 userRouters.post('/', asyncHandler(async (req, res) => {
-    const check = await checkUserAndPassword(req, res);
-    if (!check) return;
-
     const { username, password, name } = req.body;
+
+    validators.checkUserSignUp(username, password);
 
     const passwordHash = await bcrypt.hash(password, 10);
 

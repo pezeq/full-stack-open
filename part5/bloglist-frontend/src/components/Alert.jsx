@@ -19,18 +19,18 @@ const Alert = ({ message, type }) => {
             backgroundColor: '#ddffcc',
             border: '1px solid #2a8000',
         },
-    }
+    };
 
     const divStyle = {
         ...styles.base,
         ...styles[type]
-    }
+    };
 
     return (
         <div style={divStyle}>
             { message }
         </div>
-    )
-}
+    );
+};
 
 export default Alert;

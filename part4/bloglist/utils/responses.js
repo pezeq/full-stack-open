@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 const BadRequest = (res, message) => {
     return res.status(400).json({
         error: '400 Bad Request',
@@ -5,6 +8,9 @@ const BadRequest = (res, message) => {
     });
 };
 
+/**
+ * @deprecated
+ */
 const Unauthorized = (res, message) => {
     return res.status(401).json({
         error: '401 Unauthorized',
@@ -12,6 +18,9 @@ const Unauthorized = (res, message) => {
     });
 };
 
+/**
+ * @deprecated
+ */
 const NotFound = (res, message) => {
     return res.status(404).json({
         error: '404 Not Found',
@@ -23,4 +32,4 @@ module.exports = {
     BadRequest,
     Unauthorized,
     NotFound
-}
+};

@@ -3,30 +3,30 @@ import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 
 export default [
-  js.configs.recommended,
-  {
-    files: ['**/*.js'],
-    languageOptions: {
-      sourceType: 'commonjs',
-      globals: { ...globals.node },
-      ecmaVersion: 'latest',
+    js.configs.recommended,
+    {
+        files: ['**/*.js'],
+        languageOptions: {
+            sourceType: 'commonjs',
+            globals: { ...globals.node },
+            ecmaVersion: 'latest',
+        },
+        plugins: {
+            '@stylistic': stylistic,
+        },
+        rules: {
+            '@stylistic/indent': ['error', 4],
+            '@stylistic/linebreak-style': ['error', 'unix'],
+            '@stylistic/quotes': ['error', 'single'],
+            '@stylistic/semi': ['error', 'always'],
+            eqeqeq: 'error',
+            'no-trailing-spaces': 'error',
+            'object-curly-spacing': ['error', 'always'],
+            'arrow-spacing': ['error', { before: true, after: true }],
+            'no-console': 'off',
+        },
     },
-    plugins: {
-      '@stylistic': stylistic,
+    {
+        ignores: ['dist/**'],
     },
-    rules: {
-      '@stylistic/indent': ['error', 4],
-      '@stylistic/linebreak-style': ['error', 'unix'],
-      '@stylistic/quotes': ['error', 'single'],
-      '@stylistic/semi': ['error', 'always'],
-      eqeqeq: 'error',
-      'no-trailing-spaces': 'error',
-      'object-curly-spacing': ['error', 'always'],
-      'arrow-spacing': ['error', { before: true, after: true }],
-      'no-console': 'error',
-    },
-  },
-  {
-    ignores: ['dist/**'],
-  },
 ];

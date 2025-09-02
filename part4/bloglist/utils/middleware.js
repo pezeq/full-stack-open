@@ -13,18 +13,19 @@ const requestLogger = (req, res, next) => {
 };
 
 const tokenExtractor = (req, res, next) => {
-    console.log('Inside tokenExtractor');
+    logger.info('Inside tokenExtractor');
 
     const auth = req.get('authorization');
 
     if (auth && auth.startsWith('Bearer ')) {
         req.token = auth.replace('Bearer ', '');
     }
+
     next();
 };
 
 const userExtractor = async (req, res, next) => {
-    console.log('Inside userExtractor');
+    logger.info('Inside userExtractor');
 
     const decodedToken = jwt.verify(req.token, config.SECRET);
     if (!decodedToken.id) {
@@ -43,52 +44,55 @@ const unknownEndpoint = (req, res) => {
     res.status(404).json({ error: 'Unknown Endpoint' });
 };
 
+const errorMap = {
+    CastError: { status: 400, message: 'Malformatted ID' },
+    ValidationError: { status: 400, useErrMessage: true },
+    JsonWebTokenError: { status: 401, message: 'A valid token is required' },
+    TokenExpiredError: { status: 401, message: 'Token expired' },
+    MissingTitle: { status: 400, useErrMessage: true },
+    MissingUrl: { status: 400, useErrMessage: true },
+    BlogNotFound: { status: 404, useErrMessage: true },
+    InvalidOwnership: { status: 403, useErrMessage: true },
+    InvalidLogin: { status: 401, useErrMessage: true },
+    InvalidSignUp: { status: 400, useErrMessage: true },
+    InvalidUserId: { status: 400, useErrMessage: true }
+};
+
+const statusText = {
+    400: '400 Bad Request',
+    401: '401 Unauthorized',
+    403: '403 Forbidden',
+    404: '404 Not Found',
+};
+
 const errorHandler = (err, req, res, next) => {
     logger.info('Inside errorHandler');
 
-    if (err.name === 'CastError') {
-        logger.info('Inside CastError');
-        return res.status(400).json({
-            error: '400 Bad Request',
-            message: 'Malformatted ID'
-        });
-    } else if (err.name === 'ValidationError') {
-        logger.info('Inside ValidationError');
-        return res.status(400).json({
-            error: '400 Bad Request',
-            message:  err.message
-        });
-    } else if (err.name === 'MongoServerError' && err.message.includes('E11000 duplicate key error')) {
-        logger.info('Inside MongoServerError');
-        return res.status(400).json({
-            error: '400 Bad Request',
+    if (err.code === 11000) {
+        return res.status(409).json({
+            error: '409 Conflict',
             message: 'Username must be unique'
-        });
-    } else if (err.name === 'JsonWebTokenError') {
-        logger.info('Inside JsonWebTokenError');
-        return res.status(401).json({
-            error: '401 Unauthorized',
-            message: 'A valid token is required'
-        });
-    } else if (err.name === 'TokenExpiredError') {
-        logger.info('Inside JsonWebTokenError');
-        return res.status(401).json({
-            error: '401 Unauthorized',
-            message: 'Token expired'
-        });
-    } else if (err.name === 'TypeError' && err.message.includes('Cannot read properties of undefined')) {
-        logger.info('Inside TypeError');
-        return res.status(400).json({
-            error: '400 Bad Request',
-            message: 'This blog doesn\'t have a BlogUserId key'
         });
     }
 
-    logger.info('Error Name:', err.name);
-    logger.info('Error Message:', err.message);
-    res.status(500).json({ error: '500 Internal Server Error' });
+    const map = errorMap[err.name];
+    if (map) {
+        logger.info(`Error: ${err.name}`);
+        return res.status(map.status).json({
+            error: `${statusText[map.status]}`,
+            message: map.useErrMessage ? err.message : map.message
+        });
+    }
 
-    next(err);
+    logger.info('Unhandled error', {
+        name: err.name,
+        message: err.message,
+        stack: err.stack
+    });
+
+    return res.status(500).json({
+        error: '500 Internal Server Error'
+    });
 };
 
 const asyncHandler = fn => (req, res, next) => {

@@ -50,7 +50,7 @@ describe('When there is only a user in the database', () => {
                 username: 'root',
                 password: config.ROOT_PW
             })
-            .expect(400);
+            .expect(409);
 
         const usersAfter = await helper.getUsers();
         assert.strictEqual(usersAfter.length, usersBefore.length);

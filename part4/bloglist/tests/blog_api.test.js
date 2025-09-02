@@ -5,7 +5,7 @@ const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
 const helper = require('./test_helper');
-const config = require('../utils/config')
+const config = require('../utils/config');
 
 const api = supertest(app);
 
@@ -174,7 +174,7 @@ describe('Update and Delete', () => {
 
         test('only the number of likes is updated', async () => {
             const blogToUpdate = await helper.findBlog();
-            const likes = 13;
+            const likes = blogToUpdate.likes++;
 
             const TOKEN = await getToken();
 

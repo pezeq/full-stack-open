@@ -1,7 +1,7 @@
 const { test, describe } = require('node:test');
 const assert = require('node:assert');
 const listHelper = require('../utils/list_helpers');
-const helper = require('../tests/test_helper')
+const helper = require('../tests/test_helper');
 
 describe('total number of likes', () => {
     const listWithOneBlog = [

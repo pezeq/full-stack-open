@@ -1,54 +1,86 @@
 const Blog = require('../models/blog');
-const responses = require('../utils/responses');
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
 
-const checkTitleURLandUser = async (req, res) => {
-    const { title, url } = req.body;
-    if (!title || !url) {
-        return responses.BadRequest(res, 'Title or URL is missing');
+const checkTitle = (title) => {
+    if (!title) {
+        throw { name: 'MissingTitle', message: 'Blog title is missing' };
     }
-
-    const user = req.user;
-    if (!user) {
-        return responses.Unauthorized(res, 'UserId missing or not valid');
-    }
-
-    return true;
 };
 
-const checkUserAndBlog = async (req, res) => {
-    const user = req.user;
-    if (!user) {
-        return responses.Unauthorized(res, 'UserId missing or not valid');
+const checkUrl = (url) => {
+    if (!url) {
+        throw { name: 'MissingUrl', message: 'Blog URL is missing' };
+    }
+};
+
+const checkUser = (req) => {
+    if (!req.user) {
+        throw { name: 'InvalidUserId', message: 'UserId missing or not valid' };
     }
 
-    const blog = await Blog.findById(req.params.id);
+    return req.user;
+};
+
+const checkBlog = async (id) => {
+    const blog = await Blog.findById(id);
+
     if (!blog) {
-        return responses.NotFound(res, 'Blog does not exist');
+        throw { name: 'BlogNotFound', message: 'Blog does not exist' };
     }
 
-    if (user._id.toString() !== blog.user.toString()) {
-        return responses.Unauthorized(res, 'UserId and BlogUserId doesn\'t match');
-    }
-
-    return true;
+    return blog;
 };
 
-const checkUserAndPassword = async (req, res) => {
-    const { username, password } = req.body;
+const checkOwnership = (user, blog) => {
+    if (user._id.toString() !== blog.user.toString()) {
+        throw { name: 'InvalidOwnership', message: 'UserId and BlogUserId does not match' };
+    }
+};
 
+const checkUserSignUp = (username, password) => {
     if (!username || !password) {
-        return responses.BadRequest(res, 'Username or password is missing');
+        throw { name: 'InvalidSignUp', message: 'Username or password is missing' };
     }
 
     if (password.length < 3) {
-        return responses.BadRequest(res, 'Password must be at least 3 characters long');
+        throw { name: 'InvalidSignUp', message: 'Password must be at least 3 characters long' };
+    }
+};
+
+const checkLogin = async (username, password) => {
+    const user = await User.findOne({ username });
+    const passwordCorrect = user === null
+        ? false
+        : await bcrypt.compare(password, user.passwordHash);
+
+    if (!(user && passwordCorrect)) {
+        throw { name: 'InvalidLogin', message: 'Invalid username or password' };
     }
 
-    return true;
+    return user;
+};
+
+const checkUpdateLikes = (body) => {
+    const user = User.findById(body.id);
+
+    if (user) {
+        const fields = ['id', 'likes'];
+        const bodyKeys = Object.keys(body);
+
+        return bodyKeys.every(key => fields.includes(key));
+    }
+
+    throw { name: 'InvalidUserId', message: 'UserId missing or not valid' };
 };
 
 module.exports = {
-    checkTitleURLandUser,
-    checkUserAndBlog,
-    checkUserAndPassword
+    checkTitle,
+    checkUrl,
+    checkUser,
+    checkBlog,
+    checkOwnership,
+    checkUserSignUp,
+    checkLogin,
+    checkUpdateLikes
 };

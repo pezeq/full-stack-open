@@ -1,34 +1,34 @@
-import BlogsView from './BlogsView'
-import CreateNewBlog from "./CreateNewBlog"
+import BlogsView from './BlogsView';
+import CreateNewBlog from './CreateNewBlog';
+import Togglable from './Togglable';
 
 const LoggedIn = ({
     handleBlogCreation,
-    title,
-    setTitle,
-    author,
-    setAuthor,
-    url,
-    setUrl,
-    user,
     handleLogout,
-    blogs
+    handleLikeIncrease,
+    handleBlogRemove,
+    user,
+    blogs,
+    blogFormRef
 }) => (
     <div>
+        <h2>blogs</h2>
+        <div>
+            {user.name} is logged in
+            <button onClick={handleLogout}>logout</button>
+        </div>
         <BlogsView
-            user={user}
-            handleLogout={handleLogout}
             blogs={blogs}
+            user={user}
+            handleLikeIncrease={handleLikeIncrease}
+            handleBlogRemove={handleBlogRemove}
         />
-        <CreateNewBlog
-            handleBlogCreation={handleBlogCreation}
-            title={title}
-            setTitle={setTitle}
-            author={author}
-            setAuthor={setAuthor}
-            url={url}
-            setUrl={setUrl}
-        />
+        <Togglable buttonLabel={'create new blog'} ref={blogFormRef}>
+            <CreateNewBlog
+                handleBlogCreation={handleBlogCreation}
+            />
+        </Togglable>
     </div>
-)
+);
 
 export default LoggedIn;
