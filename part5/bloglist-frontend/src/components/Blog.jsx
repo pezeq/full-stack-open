@@ -13,6 +13,10 @@ const Blog = ({
         marginBottom: '5px'
     };
 
+    const spanStyle = {
+        display: 'block'
+    };
+
     const [view, setView] = useState(false);
 
     const toggleView = () => {
@@ -45,21 +49,19 @@ const Blog = ({
         <div style={divStyle}>
             {
                 view === true
-                    ?   <div>
-                            title: {blog.title}<br />
-                            url: {blog.url}<br />
-                            likes: {blog.likes} <button onClick={updateLike}>like</button><br />
-                            author: {blog.author}<br />
-                            user: {blog.user.name}<br />
-                        <button onClick={toggleView}>hide</button><br />
-                        {
-                            blog.user.username === user.username
-                                ? <button onClick={deleteBlog}>remove</button>
-                                : null
-                        }
+                    ? <div>
+                        title: <span style={spanStyle}>{blog.title}</span>
+                        url: <span style={spanStyle}>{blog.url}</span>
+                        likes: <span style={spanStyle}>{blog.likes}<button onClick={updateLike}>like</button></span>
+                        author: <span style={spanStyle}>{blog.author}</span>
+                        user: <span style={spanStyle}>{blog.user?.name}</span>
+                        <button onClick={toggleView}>hide</button>
+                        {blog.user?.username === user?.username && (
+                            <button onClick={deleteBlog}>remove</button>
+                        )}
                     </div>
-                    :   <div>
-                        {blog.title} {blog.author}
+                    : <div>
+                        <span>{blog.title}</span><span>{blog.author}</span>
                         <button onClick={toggleView}>view</button>
                     </div>
             }
