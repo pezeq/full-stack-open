@@ -10,25 +10,33 @@ const LoggedIn = ({
     user,
     blogs,
     blogFormRef
-}) => (
-    <div>
-        <h2>blogs</h2>
+}) => {
+    const loggedInRow = {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '5px'
+    };
+
+    return (
         <div>
-            {user.name} is logged in
-            <button onClick={handleLogout}>logout</button>
-        </div>
-        <BlogsView
-            blogs={blogs}
-            user={user}
-            handleLikeIncrease={handleLikeIncrease}
-            handleBlogRemove={handleBlogRemove}
-        />
-        <Togglable buttonLabel={'create new blog'} ref={blogFormRef}>
-            <CreateNewBlog
-                handleBlogCreation={handleBlogCreation}
+            <h2>blogs</h2>
+            <div style={loggedInRow}>
+                {user.name} is logged in
+                <button onClick={handleLogout}>logout</button>
+            </div>
+            <BlogsView
+                blogs={blogs}
+                user={user}
+                handleLikeIncrease={handleLikeIncrease}
+                handleBlogRemove={handleBlogRemove}
             />
-        </Togglable>
-    </div>
-);
+            <Togglable buttonLabel={'create new blog'} ref={blogFormRef}>
+                <CreateNewBlog
+                    handleBlogCreation={handleBlogCreation}
+                />
+            </Togglable>
+        </div>
+    );
+};
 
 export default LoggedIn;

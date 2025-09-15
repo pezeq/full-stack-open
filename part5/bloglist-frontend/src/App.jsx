@@ -103,11 +103,8 @@ const App = () => {
                 type={alertType}
             />
             {
-                user === null
-                    ?   <LoginForm
-                        handleLogin={handleLogin}
-                    />
-                    :   <LoggedIn
+                user ? (
+                    <LoggedIn
                         handleBlogCreation={handleBlogCreation}
                         handleLogout={handleLogout}
                         handleLikeIncrease={handleLikeIncrease}
@@ -116,6 +113,11 @@ const App = () => {
                         blogs={blogs}
                         blogFormRef={blogFormRef}
                     />
+                ) : (
+                    <LoginForm
+                        handleLogin={handleLogin}
+                    />
+                )
             }
         </main>
     );

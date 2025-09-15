@@ -6,14 +6,20 @@ const Blog = ({
     handleLikeIncrease,
     handleBlogRemove
 }) => {
-    const divStyle = {
+    const blogContainer = {
         border: '1px solid',
         borderRadius: '5px',
         padding: '10px',
         marginBottom: '5px'
     };
 
-    const spanStyle = {
+    const blogRow = {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '5px'
+    };
+
+    const blogSpan = {
         display: 'block'
     };
 
@@ -46,24 +52,36 @@ const Blog = ({
     };
 
     return (
-        <div style={divStyle}>
+        <div className="blog" style={blogContainer}>
             {
-                view === true
-                    ? <div>
-                        title: <span style={spanStyle}>{blog.title}</span>
-                        url: <span style={spanStyle}>{blog.url}</span>
-                        likes: <span style={spanStyle}>{blog.likes}<button onClick={updateLike}>like</button></span>
-                        author: <span style={spanStyle}>{blog.author}</span>
-                        user: <span style={spanStyle}>{blog.user?.name}</span>
-                        <button onClick={toggleView}>hide</button>
-                        {blog.user?.username === user?.username && (
-                            <button onClick={deleteBlog}>remove</button>
-                        )}
+                view ? (
+                    <div>
+                        <span id="title" style={blogSpan}>title: {blog.title}</span>
+
+                        <span id="url" style={blogSpan}>url: {blog.url}</span>
+
+                        <div style={blogRow}>
+                            <span id="likes" style={blogSpan}>likes: {blog.likes}</span>
+                            <button id="like-btn" onClick={updateLike}>like</button>
+                        </div>
+
+                        <span id="author" style={blogSpan}>author: {blog.author}</span>
+
+                        <span id="user" style={blogSpan}>user: {blog.user?.name}</span>
+
+                        <div style={blogRow}>
+                            <button id="hide-btn" onClick={toggleView}>hide</button>
+                            {blog.user?.username === user?.username && (
+                                <button id="remove-btn" onClick={deleteBlog}>remove</button>
+                            )}
+                        </div>
                     </div>
-                    : <div>
-                        <span>{blog.title}</span><span>{blog.author}</span>
+                ) : (
+                    <div>
+                        <span>{blog.title}</span> <span>{blog.author}</span>
                         <button onClick={toggleView}>view</button>
                     </div>
+                )
             }
         </div>
     );

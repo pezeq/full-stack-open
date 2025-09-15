@@ -27,7 +27,7 @@ const Alert = ({ message, type }) => {
     };
 
     return (
-        <div style={divStyle}>
+        <div className="alert" style={divStyle}>
             { message }
         </div>
     );
