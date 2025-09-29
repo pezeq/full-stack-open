@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { createNewAnecdote } from '../reducers/anecdoteReducer';
+import { showNotification } from '../reducers/notificationReducer';
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch();
@@ -8,9 +9,16 @@ const AnecdoteForm = () => {
         e.preventDefault();
 
         const anecdote = e.target.anecdote.value;
+
+        if (!anecdote) {
+            dispatch(showNotification('Anecdote can\'t be empty.', 'error'));
+            return;
+        }
+
         e.target.anecdote.value = '';
 
         dispatch(createNewAnecdote(anecdote));
+        dispatch(showNotification(`New anecdote '${anecdote}' created`, 'success'));
     };
 
     return (

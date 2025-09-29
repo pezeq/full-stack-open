@@ -1,18 +1,24 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { upVoteAnecdote } from '../reducers/anecdoteReducer';
+import { showNotification } from '../reducers/notificationReducer';
 
 const AnecdoteList = () => {
     const anecdotes = useSelector(({ anecdote, filter }) => {
         if (filter === '') return anecdote;
-        return anecdote.filter(a => a.content.includes(filter));
+        return anecdote.filter(a => {
+            const content = a.content.toLowerCase();
+            const filterLowerCase = filter.toLowerCase();
+            return content.includes(filterLowerCase);
+        });
     });
+
+    const sorted = [...anecdotes].sort((a, b) => b.votes - a.votes);
 
     const dispatch = useDispatch();
 
-    const sorted = anecdotes.sort((a, b) => b.votes - a.votes);
-
-    const vote = (id) => {
-        dispatch(upVoteAnecdote(id));
+    const vote = (anecdote) => {
+        dispatch(upVoteAnecdote(anecdote.id));
+        dispatch(showNotification(`You upvoted '${anecdote.content}' anecdote!`, 'success'));
     };
 
     return (
@@ -24,7 +30,7 @@ const AnecdoteList = () => {
                     </div>
                     <div>
                         has {anecdote.votes}
-                        <button onClick={() => vote(anecdote.id)}>vote</button>
+                        <button onClick={() => vote(anecdote)}>vote</button>
                     </div>
                 </div>
             )}
