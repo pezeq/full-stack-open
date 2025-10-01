@@ -1,11 +1,12 @@
 import { useDispatch } from 'react-redux';
 import { createNewAnecdote } from '../reducers/anecdoteReducer';
 import { showNotification } from '../reducers/notificationReducer';
+import anecdoteService from '../../services/anecdoteService';
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch();
 
-    const createNew = (e) => {
+    const createNew = async (e) => {
         e.preventDefault();
 
         const anecdote = e.target.anecdote.value;
@@ -17,7 +18,9 @@ const AnecdoteForm = () => {
 
         e.target.anecdote.value = '';
 
-        dispatch(createNewAnecdote(anecdote));
+        const newAnecdote = await anecdoteService.createNew(anecdote);
+
+        dispatch(createNewAnecdote(newAnecdote));
         dispatch(showNotification(`New anecdote '${anecdote}' created`, 'success'));
     };
 

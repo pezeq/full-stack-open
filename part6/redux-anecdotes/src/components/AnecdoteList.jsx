@@ -21,10 +21,14 @@ const AnecdoteList = () => {
         dispatch(showNotification(`You upvoted '${anecdote.content}' anecdote!`, 'success'));
     };
 
+    const divStyle = {
+        marginBottom: '10px'
+    };
+
     return (
         <div>
             {sorted.map(anecdote =>
-                <div key={anecdote.id}>
+                <div key={anecdote.id} style={divStyle}>
                     <div>
                         {anecdote.content}
                     </div>
