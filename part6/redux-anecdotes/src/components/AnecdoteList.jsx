@@ -17,8 +17,8 @@ const AnecdoteList = () => {
     const dispatch = useDispatch();
 
     const vote = (anecdote) => {
-        dispatch(upVoteAnecdote(anecdote.id));
-        dispatch(showNotification(`You upvoted '${anecdote.content}' anecdote!`, 'success'));
+        dispatch(upVoteAnecdote(anecdote));
+        dispatch(showNotification(`You upvoted '${anecdote.content}' anecdote!`, 2, 'success'));
     };
 
     const divStyle = {

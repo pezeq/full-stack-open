@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { createNewAnecdote } from '../reducers/anecdoteReducer';
 import { showNotification } from '../reducers/notificationReducer';
-import anecdoteService from '../../services/anecdoteService';
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch();
@@ -12,16 +11,14 @@ const AnecdoteForm = () => {
         const anecdote = e.target.anecdote.value;
 
         if (!anecdote) {
-            dispatch(showNotification('Anecdote can\'t be empty.', 'error'));
+            dispatch(showNotification('Anecdote can\'t be empty.', 2, 'error'));
             return;
         }
 
         e.target.anecdote.value = '';
 
-        const newAnecdote = await anecdoteService.createNew(anecdote);
-
-        dispatch(createNewAnecdote(newAnecdote));
-        dispatch(showNotification(`New anecdote '${anecdote}' created`, 'success'));
+        dispatch(createNewAnecdote(anecdote));
+        dispatch(showNotification(`New anecdote '${anecdote}' created`, 2, 'success'));
     };
 
     return (
