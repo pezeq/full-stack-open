@@ -1,14 +1,20 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { getAll, update } from '../services/anecdoteService.js';
+import { useNotificationDispatch, showNotification } from "../NotificationContext.jsx";
 
 const AnecdoteList = () => {
     const queryClient = useQueryClient();
+    const dispatch = useNotificationDispatch();
 
     const votesMutation = useMutation({
         mutationFn: update,
         onSuccess: (anecdote) => {
             const anecdotes = queryClient.getQueryData(['anecdotes']);
             queryClient.setQueryData(['anecdotes'], anecdotes.map(a => a.id !== anecdote.id ? a : anecdote));
+            showNotification(dispatch, `Anecdote '${anecdote.content}' has been upvoted`);
+        },
+        onError: () => {
+            showNotification(dispatch, 'Something went wrong... Could not upvote anecdote!');
         }
     });
 
