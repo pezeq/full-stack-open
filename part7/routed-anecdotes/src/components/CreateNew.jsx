@@ -1,19 +1,24 @@
-import { useState } from 'react';
+import { useField } from '../hooks/index.js';
 
 const CreateNew = ({ addNew }) => {
-    const [content, setContent] = useState('');
-    const [author, setAuthor] = useState('');
-    const [info, setInfo] = useState('');
-
+    const { reset: resetContent, ...content } = useField('content', 'text');
+    const { reset: resetAuthor, ...author } = useField('author', 'text');
+    const { reset: resetInfo, ...info } = useField('info', 'text');
 
     const handleSubmit = (e) => {
         e.preventDefault();
         addNew({
-            content,
-            author,
-            info,
+            content: content.value,
+            author: author.value,
+            info: info.value,
             votes: 0
         });
+    };
+
+    const handleReset = () => {
+        resetContent();
+        resetAuthor();
+        resetInfo();
     };
 
     return (
@@ -21,18 +26,19 @@ const CreateNew = ({ addNew }) => {
             <h2>create a new anecdote</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    content
-                    <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+                    {content.name}
+                    <input {...content} />
                 </div>
                 <div>
-                    author
-                    <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+                    {author.name}
+                    <input {...author} />
                 </div>
                 <div>
-                    url for more info
-                    <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
+                    {info.name}
+                    <input {...info} />
                 </div>
                 <button>create</button>
+                <button type={'button'} onClick={handleReset}>reset</button>
             </form>
         </div>
     );

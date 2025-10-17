@@ -7,6 +7,7 @@ import Footer from './components/Footer.jsx';
 import Anecdote from './components/Anecdote.jsx';
 import Notification from './components/Notification.jsx';
 import { Route, Routes, useMatch, useNavigate } from 'react-router-dom';
+import { useNotification } from './hooks/index.js';
 
 const App = () => {
     const [anecdotes, setAnecdotes] = useState([
@@ -25,31 +26,27 @@ const App = () => {
             id: 2
         }
     ]);
-
-    const [notification, setNotification] = useState('');
+    const { message, type, pushNotification } = useNotification();
 
     const match = useMatch('/anecdotes/:id');
-
     const anecdote = match
         ? anecdotes.find(a => a.id === Number(match.params.id))
         : null;
 
     const navigate = useNavigate();
 
-    const pushNotification = (content) => {
-        setNotification(`a new anecdote '${content}' has been created!`);
-        setTimeout(() => {
-            setNotification('');
-        }, 5000);
-    };
-
     const addNew = (anecdote) => {
+        if (!anecdote.content || !anecdote.author || !anecdote.info) {
+            pushNotification('all fields must be filled out', 'error');
+            return;
+        }
+
         anecdote.id = Math.round(Math.random() * 10000);
         setAnecdotes(anecdotes.concat(anecdote));
 
         navigate('/');
 
-        pushNotification(anecdote.content);
+        pushNotification(`a new anecdote '${anecdote.content}' has been created!`, 'success');
     };
 
     const anecdoteById = (id) => {
@@ -74,7 +71,7 @@ const App = () => {
                 <Menu />
             </div>
 
-            <Notification message={notification} />
+            <Notification message={message} type={type}/>
 
             <Routes>
                 <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
