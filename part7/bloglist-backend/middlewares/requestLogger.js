@@ -1,6 +1,6 @@
 const logger = require('../utils/logger');
 
-const requestLogger = (err, req, res, next) => {
+const requestLogger = (req, res, next) => {
     logger.info('---');
     logger.info('METHOD:\t', req.method);
     logger.info('PATH:\t', req.path);

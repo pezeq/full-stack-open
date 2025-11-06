@@ -13,4 +13,21 @@ class ValidationError extends HttpError {
     }
 }
 
-module.exports = { HttpError, ValidationError };
+class UnallowedKeysError extends HttpError {
+    constructor(message) {
+        super(message, 400);
+    }
+}
+
+class ResourceNotFoundError extends HttpError {
+    constructor(message) {
+        super(message, 404);
+    }
+}
+
+module.exports = {
+    HttpError,
+    ValidationError,
+    UnallowedKeysError,
+    ResourceNotFoundError,
+};

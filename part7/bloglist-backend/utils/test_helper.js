@@ -44,8 +44,23 @@ const getBlogs = async () => {
     return fetchedBlogs.map((b) => b.toJSON());
 };
 
+const getBlogId = async () => {
+    const fetchedBlogs = await getBlogs();
+    const { id } = fetchedBlogs[0];
+    return id;
+};
+
+const unexistentId = async () => {
+    const fetchedBlogs = await getBlogs();
+    const { id } = fetchedBlogs[0];
+    await Blog.findByIdAndDelete({ _id: id });
+    return id;
+};
+
 module.exports = {
-    getBlogs,
     blogs,
     sampleBlog,
+    getBlogs,
+    getBlogId,
+    unexistentId,
 };

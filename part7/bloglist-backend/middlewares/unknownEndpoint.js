@@ -1,7 +1,9 @@
-const unknownEndpoint = (err, req, res, next) => {
+const unknownEndpoint = (req, res, next) => {
     return res.status(404).json({
-        error: '404 Not Found',
-        message: 'Unknown Endpoint',
+        name: 'UnknownEndpoint',
+        status: 404,
+        message: 'Endpoint does not exist',
+        timestamp: new Date().toISOString(),
     });
 };
 
