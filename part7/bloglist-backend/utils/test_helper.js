@@ -1,4 +1,6 @@
 const Blog = require('../models/blogModel');
+const User = require('../models/userModel');
+const { SAMPLE_USER_PASSWORD } = require('../utils/config');
 
 const blogs = [
     {
@@ -39,6 +41,12 @@ const sampleBlog = {
     url: 'https://github.com/pezeq',
 };
 
+const sampleUser = {
+    username: 'pezeq',
+    password: SAMPLE_USER_PASSWORD,
+    name: 'Pedro Ezequiel',
+};
+
 const getBlogs = async () => {
     const fetchedBlogs = await Blog.find({});
     return fetchedBlogs.map((b) => b.toJSON());
@@ -57,10 +65,17 @@ const unexistentId = async () => {
     return id;
 };
 
+const getUsers = async () => {
+    const fetchedUsers = await User.find({});
+    return fetchedUsers.map((u) => u.toJSON());
+};
+
 module.exports = {
     blogs,
     sampleBlog,
+    sampleUser,
     getBlogs,
     getBlogId,
     unexistentId,
+    getUsers,
 };

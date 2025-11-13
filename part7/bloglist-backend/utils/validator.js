@@ -3,7 +3,7 @@ const {
     UnallowedKeysError,
     ResourceNotFoundError,
 } = require('../errors/HttpError');
-const mongoose = require('mongoose');
+const User = require('../models/userModel');
 
 const hasUrl = (url) => {
     if (!url) {
@@ -38,9 +38,33 @@ const resourceExists = (resource, name) => {
     }
 };
 
+const hasPassword = (password) => {
+    if (!password) {
+        throw new ValidationError('User password is missing');
+    }
+
+    if (password.length < 3) {
+        throw new ValidationError(
+            'Password is shorter than the minimum allowed length (3)'
+        );
+    }
+};
+
+const hasUser = async (userId) => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new ValidationError('User ID missing or not valid');
+    }
+
+    return user;
+};
+
 module.exports = {
     hasUrl,
     hasTitle,
     hasExtraKey,
     resourceExists,
+    hasPassword,
+    hasUser,
 };

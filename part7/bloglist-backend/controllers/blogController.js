@@ -17,12 +17,18 @@ const getBlog = asyncHandler(async (req, res) => {
 });
 
 const createNewBlog = asyncHandler(async (req, res) => {
-    const { title, author, url } = req.body;
+    const { title, author, url, createdBy } = req.body;
 
     validator.hasTitle(title);
     validator.hasUrl(url);
+    //const user = await validator.hasUser(createdBy);
 
-    const createdBlog = await blogService.createNewBlog(title, author, url);
+    const createdBlog = await blogService.createNewBlog(
+        title,
+        author,
+        url
+        //user
+    );
     res.status(201).json(createdBlog);
 });
 
