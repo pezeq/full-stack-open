@@ -25,9 +25,16 @@ class ResourceNotFoundError extends HttpError {
     }
 }
 
+class UnauthorizedError extends HttpError {
+    constructor(message) {
+        super(message, 401);
+    }
+}
+
 module.exports = {
     HttpError,
     ValidationError,
     UnallowedKeysError,
     ResourceNotFoundError,
+    UnauthorizedError,
 };

@@ -2,8 +2,11 @@ const {
     ValidationError,
     UnallowedKeysError,
     ResourceNotFoundError,
+    UnauthorizedError,
 } = require('../errors/HttpError');
 const User = require('../models/userModel');
+const Blog = require('../models/blogModel');
+const bcrypt = require('bcrypt');
 
 const hasUrl = (url) => {
     if (!url) {
@@ -32,8 +35,8 @@ const hasExtraKey = (body, allowedKeys) => {
     }
 };
 
-const resourceExists = (resource, name) => {
-    if (!resource) {
+const resourceExists = (resource, name = 'Resource') => {
+    if (!resource || resource.length === 0) {
         throw new ResourceNotFoundError(`${name} was not found`);
     }
 };
@@ -50,14 +53,38 @@ const hasPassword = (password) => {
     }
 };
 
-const hasUser = async (userId) => {
-    const user = await User.findById(userId);
+const userIsOwner = async (id, user) => {
+    const blog = await Blog.findById({ _id: id });
+    resourceExists(blog, 'Blog');
 
-    if (!user) {
-        throw new ValidationError('User ID missing or not valid');
+    if (!(blog.createdBy.toString() === user._id.toString())) {
+        throw new UnauthorizedError("You cannot delete another user's blog");
+    }
+
+    return true;
+};
+
+const userLogin = async (username, password) => {
+    hasPassword(password);
+
+    const user = await User.findOne({ username });
+
+    const passwordCorrect =
+        user === null
+            ? false
+            : await bcrypt.compare(password, user.passwordHash);
+
+    if (!(user && passwordCorrect)) {
+        throw new UnauthorizedError('Invalid username or password');
     }
 
     return user;
+};
+
+const tokenHasValidId = (id) => {
+    if (!id) {
+        throw new UnauthorizedError('Token does not contain valid user ID');
+    }
 };
 
 module.exports = {
@@ -66,5 +93,7 @@ module.exports = {
     hasExtraKey,
     resourceExists,
     hasPassword,
-    hasUser,
+    userLogin,
+    userIsOwner,
+    tokenHasValidId,
 };

@@ -6,12 +6,13 @@ const getAllBlogs = async () => {
 };
 
 const getBlog = async (id) => {
-    return Blog.findById({ _id: id });
+    return Blog.findById({ _id: id }).populate('createdBy', {
+        username: 1,
+        id: 1,
+    });
 };
 
-const createNewBlog = async (title, author, url) => {
-    const user = await User.findOne({});
-
+const createNewBlog = async (title, author, url, user) => {
     const blog = new Blog({
         title,
         author,
@@ -28,7 +29,9 @@ const createNewBlog = async (title, author, url) => {
     return createdBlog;
 };
 
-const deleteBlog = async (id) => {
+const deleteBlog = async (id, user) => {
+    user.blogs = user.blogs.filter((b) => b.toString() !== id.toString());
+    await user.save();
     return Blog.deleteOne({ _id: id });
 };
 

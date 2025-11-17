@@ -11,11 +11,15 @@ const MONGODB_URI = isTestEnvironment
 const PORT = process.env.PORT;
 
 const SAMPLE_USER_PASSWORD = process.env.SAMPLE_USER_PASSWORD;
+
 const BCRYPT_SALT = Number(process.env.BCRYPYT_SALT);
+
+const SECRET = process.env.SECRET;
 
 module.exports = {
     MONGODB_URI,
     PORT,
     SAMPLE_USER_PASSWORD,
     BCRYPT_SALT,
+    SECRET,
 };

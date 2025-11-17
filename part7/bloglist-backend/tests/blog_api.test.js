@@ -1,28 +1,51 @@
-const { test, describe, beforeEach, after } = require('node:test');
+const { test, describe, beforeEach, before, after } = require('node:test');
 const assert = require('node:assert');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blogModel');
 const helper = require('../utils/test_helper');
+const User = require('../models/userModel');
 
 const api = supertest(app);
-
 const path = '/api/blogs';
+
+let TOKEN;
+let ID;
+
+before(async () => {
+    await User.deleteMany({});
+    await helper.createTestUser();
+
+    const res = await api.post('/api/login').send({
+        username: 'test',
+        password: helper.sampleUser.password,
+    });
+
+    const user = await helper.getTestUser();
+
+    ID = user.id;
+    TOKEN = res.body.token;
+});
+
+const blogs = helper.initializeBlogs(ID);
 
 beforeEach(async () => {
     await Blog.deleteMany({});
-    await Blog.insertMany(helper.blogs);
+    await Blog.insertMany(blogs);
 });
 
 describe('HTTP GET', () => {
     test('returns content in json format', async () => {
-        await api.get(path).expect('Content-Type', /json/).expect(200);
+        await api
+            .get(path) //
+            .expect('Content-Type', /json/) //
+            .expect(200);
     });
 
     test('returns the correct amount of blog posts', async () => {
         const fetchedBlogs = await helper.getBlogs();
-        assert.strictEqual(fetchedBlogs.length, helper.blogs.length);
+        assert.strictEqual(fetchedBlogs.length, blogs.length);
     });
 
     test('unique identifier of the blog posts is named id', async () => {
@@ -75,8 +98,9 @@ describe('HTTP POST', () => {
         const before = await helper.getBlogs();
 
         await api
-            .post(path) //
-            .send(helper.sampleBlog) //
+            .post(path)
+            .send(helper.sampleBlog)
+            .set('Authorization', `Bearer ${TOKEN}`)
             .expect(201)
             .expect('Content-Type', /json/);
 
@@ -95,6 +119,7 @@ describe('HTTP POST', () => {
         const res = await api
             .post(path)
             .send(helper.sampleBlog)
+            .set('Authorization', `Bearer ${TOKEN}`)
             .expect(201)
             .expect('Content-Type', /json/);
 
@@ -110,6 +135,7 @@ describe('HTTP POST', () => {
                 title: 'Missing URL',
                 author: 'Pedro Ezequiel',
             })
+            .set('Authorization', `Bearer ${TOKEN}`)
             .expect(400)
             .expect('Content-Type', /json/);
 
@@ -131,6 +157,7 @@ describe('HTTP POST', () => {
                 url: 'https://missingtitle.com/',
                 author: 'Pedro Ezequiel',
             })
+            .set('Authorization', `Bearer ${TOKEN}`)
             .expect(400)
             .expect('Content-Type', /json/);
 
@@ -149,7 +176,10 @@ describe('HTTP DELETE', () => {
         const before = await helper.getBlogs();
         const { id, title } = before[0];
 
-        await api.delete(`${path}/${id}`).expect(204);
+        await api
+            .delete(`${path}/${id}`)
+            .set('Authorization', `Bearer ${TOKEN}`)
+            .expect(204);
 
         const after = await helper.getBlogs();
         const hasBeenDeleted = !after.some((b) => b.title === title);

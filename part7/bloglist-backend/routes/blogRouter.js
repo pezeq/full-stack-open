@@ -1,10 +1,11 @@
 const blogRouter = require('express').Router();
 const blogController = require('../controllers/blogController');
+const { userExtractor } = require('../middlewares');
 
 blogRouter.get('/', blogController.getAllBlogs);
 blogRouter.get('/:id', blogController.getBlog);
-blogRouter.post('/', blogController.createNewBlog);
-blogRouter.delete('/:id', blogController.deleteBlog);
+blogRouter.post('/', userExtractor, blogController.createNewBlog);
+blogRouter.delete('/:id', userExtractor, blogController.deleteBlog);
 blogRouter.put('/:id/likes', blogController.updateBlogLikes);
 
 module.exports = blogRouter;

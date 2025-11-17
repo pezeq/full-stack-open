@@ -9,6 +9,15 @@ const getAllUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
+const getUser = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const user = await userService.getUser(id);
+
+    validator.resourceExists(user, 'User');
+
+    res.status(200).json(user);
+});
+
 const createUser = asyncHandler(async (req, res) => {
     const { username, password, name } = req.body;
 
@@ -21,5 +30,6 @@ const createUser = asyncHandler(async (req, res) => {
 
 module.exports = {
     getAllUsers,
+    getUser,
     createUser,
 };

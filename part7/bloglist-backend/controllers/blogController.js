@@ -1,5 +1,5 @@
 const blogService = require('../services/blogService');
-const asyncHandler = require('../middlewares/asyncHandler');
+const { userExtractor, asyncHandler } = require('../middlewares');
 const validator = require('../utils/validator');
 
 const getAllBlogs = asyncHandler(async (req, res) => {
@@ -17,25 +17,32 @@ const getBlog = asyncHandler(async (req, res) => {
 });
 
 const createNewBlog = asyncHandler(async (req, res) => {
-    const { title, author, url, createdBy } = req.body;
+    const { title, author, url } = req.body;
+    const user = req.user;
 
     validator.hasTitle(title);
     validator.hasUrl(url);
-    //const user = await validator.hasUser(createdBy);
 
     const createdBlog = await blogService.createNewBlog(
         title,
         author,
-        url
-        //user
+        url,
+        user
     );
+
     res.status(201).json(createdBlog);
 });
 
 const deleteBlog = asyncHandler(async (req, res) => {
+    const user = req.user;
     const { id } = req.params;
-    await blogService.deleteBlog(id);
-    res.status(204).end();
+
+    const isOwner = await validator.userIsOwner(id, user);
+
+    if (isOwner) {
+        await blogService.deleteBlog(id, user);
+        res.status(204).end();
+    }
 });
 
 const updateBlogLikes = asyncHandler(async (req, res) => {

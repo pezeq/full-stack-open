@@ -4,28 +4,14 @@ const supertest = require('supertest');
 const app = require('../app');
 const mongoose = require('mongoose');
 const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
 const helper = require('../utils/test_helper');
-const { BCRYPT_SALT } = require('../utils/config');
 
 const api = supertest(app);
-
 const path = '/api/users';
 
 beforeEach(async () => {
     await User.deleteMany({});
-
-    const { password } = helper.sampleUser;
-
-    const passwordHash = await bcrypt.hash(password, BCRYPT_SALT);
-
-    const user = new User({
-        username: 'test',
-        passwordHash,
-        name: 'Tester',
-    });
-
-    await user.save();
+    await helper.createTestUser();
 });
 
 describe('HTTP POST', () => {
