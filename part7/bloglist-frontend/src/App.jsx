@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import LoginForm from './components/LoginForm';
 import LoggedIn from './components/LoggedIn';
 import Alert from './components/Alert';
@@ -11,6 +11,7 @@ const App = () => {
     const [user, setUser] = useState(null);
     const [fetchBlogs, setFetchBlogs] = useState(false);
     const { alertMsg, alertType, pushAlert } = useAlert();
+    const blogFormRef = useRef();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,6 +53,7 @@ const App = () => {
     };
 
     const handleCreateBlog = async (newBlog) => {
+        blogFormRef.current.toggleVisibility();
         try {
             const createdBlog = await blogService.createNew(newBlog);
             pushAlert(`A new blog '${createdBlog.title}' has been created`, 'success');
@@ -59,6 +61,30 @@ const App = () => {
         } catch (err) {
             console.error('Error creating new blog:', err.response?.data);
             pushAlert(`Error creating new blog: ${err.response?.data?.message}`);
+        }
+    };
+
+    const handleLikeIncrease = async (blogToBeLiked) => {
+        const { id, ...likes } = blogToBeLiked;
+        try {
+            const updatedBlog = await blogService.updateLikes(id, likes);
+            pushAlert(`Blog '${updatedBlog.title}' has now ${updatedBlog.likes} likes`, 'success');
+            setFetchBlogs(!fetchBlogs);
+        } catch (err) {
+            console.error('Error updating blog:', err.response?.data);
+            pushAlert(`Error updating new blog: ${err.response?.data?.message}`);
+        }
+    };
+
+    const handleRemoveBlog = async (blogToBeRemoved) => {
+        const { id, title } = blogToBeRemoved;
+        try {
+            await blogService.removeBlog(id);
+            pushAlert(`Blog '${title}' has been removed`, 'success');
+            setFetchBlogs(!fetchBlogs);
+        } catch (err) {
+            console.error('Error removing blog:', err.response?.data);
+            pushAlert(`Error removing blog: ${err.response?.data?.message}`);
         }
     };
 
@@ -75,6 +101,9 @@ const App = () => {
                             blogs={blogs}
                             user={user}
                             handleCreateBlog={handleCreateBlog}
+                            handleLikeIncrease={handleLikeIncrease}
+                            handleRemoveBlog={handleRemoveBlog}
+                            blogFormRef={blogFormRef}
                         />
                     ) : (
                         <LoginForm

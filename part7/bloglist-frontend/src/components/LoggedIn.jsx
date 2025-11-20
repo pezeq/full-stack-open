@@ -1,7 +1,8 @@
-import Blog from './Blog';
 import CreateNewBlog from './CreateNewBlog';
+import Togglable from './Togglable';
+import BlogView from './BlogView';
 
-const LoggedIn = ({ blogs, user, handleCreateBlog }) => {
+const LoggedIn = ({ blogs, user, handleCreateBlog, handleLikeIncrease, handleRemoveBlog, blogFormRef }) => {
     const handleLogout = () => {
         window.localStorage.removeItem('storedUser');
         window.location.reload();
@@ -10,16 +11,22 @@ const LoggedIn = ({ blogs, user, handleCreateBlog }) => {
     return (
         <div>
             <h2>blogs</h2>
-            <div>{user.name ?? user.username} logged in <button onClick={handleLogout}>logout</button></div>
-            <CreateNewBlog handleCreateBlog={handleCreateBlog}/>
             <div>
-                {blogs.map(blog =>
-                    <Blog key={blog.id} blog={blog} />
-                )}
+                {user.name ?? user.username} logged in
+                <button onClick={handleLogout}>logout</button>
             </div>
+            <Togglable buttonLabel={'create new blog'} ref={blogFormRef}>
+                <CreateNewBlog
+                    handleCreateBlog={handleCreateBlog}
+                />
+            </Togglable>
+            <BlogView
+                blogs={blogs}
+                handleLikeIncrease={handleLikeIncrease}
+                handleRemoveBlog={handleRemoveBlog}
+            />
         </div>
     );
 };
 
 export default LoggedIn;
-
