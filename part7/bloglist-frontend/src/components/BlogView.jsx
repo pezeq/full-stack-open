@@ -1,6 +1,6 @@
 import Blog from './Blog';
 
-const BlogView = ({ blogs, handleLikeIncrease, handleRemoveBlog }) => {
+const BlogView = ({ blogs, handleLikeIncrease, handleRemoveBlog, username }) => {
     const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
     return (
@@ -12,6 +12,7 @@ const BlogView = ({ blogs, handleLikeIncrease, handleRemoveBlog }) => {
                         blog={blog}
                         handleLikeIncrease={handleLikeIncrease}
                         handleRemoveBlog={handleRemoveBlog}
+                        username={username}
                     />
                 )}
             </div>

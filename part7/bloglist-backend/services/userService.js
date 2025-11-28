@@ -12,7 +12,7 @@ const createUser = async (username, passwordHash, name) => {
     const newUser = new User({
         username,
         passwordHash,
-        name: name || 'N/A',
+        name: name,
     });
 
     return await newUser.save();

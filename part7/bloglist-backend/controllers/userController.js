@@ -25,6 +25,7 @@ const createUser = asyncHandler(async (req, res) => {
 
     const passwordHash = await bcrypt.hash(password, BCRYPT_SALT);
     const newUser = await userService.createUser(username, passwordHash, name);
+
     res.status(201).json(newUser);
 });
 

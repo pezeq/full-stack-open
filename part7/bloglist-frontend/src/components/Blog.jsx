@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Blog = ({ blog, handleLikeIncrease, handleRemoveBlog }) => {
+const Blog = ({ blog, handleLikeIncrease, handleRemoveBlog, username }) => {
     const [fullView, setFullView] = useState(false);
 
     const blogStyle = {
@@ -42,7 +42,7 @@ const Blog = ({ blog, handleLikeIncrease, handleRemoveBlog }) => {
                         <span style={spanStyle}>{blog.url}</span>
                         <span style={spanStyle}>likes {blog.likes} <button onClick={updateLikes}>like</button></span>
                         <span style={spanStyle}>{blog.author}</span>
-                        <button onClick={removeBlog}>remove</button>
+                        {blog.createdBy.username === username && <button onClick={removeBlog}>remove</button>}
                     </div>
                 ) : (
                     <div style={blogStyle}>

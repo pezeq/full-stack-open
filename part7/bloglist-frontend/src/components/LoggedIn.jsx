@@ -24,6 +24,7 @@ const LoggedIn = ({ blogs, user, handleCreateBlog, handleLikeIncrease, handleRem
                 blogs={blogs}
                 handleLikeIncrease={handleLikeIncrease}
                 handleRemoveBlog={handleRemoveBlog}
+                username={user.username}
             />
         </div>
     );

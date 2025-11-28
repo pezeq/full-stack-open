@@ -12,6 +12,7 @@ const path = '/api/blogs';
 
 let TOKEN;
 let ID;
+let BLOGS;
 
 before(async () => {
     await User.deleteMany({});
@@ -26,13 +27,12 @@ before(async () => {
 
     ID = user.id;
     TOKEN = res.body.token;
+    BLOGS = helper.initializeBlogs(ID);
 });
-
-const blogs = helper.initializeBlogs(ID);
 
 beforeEach(async () => {
     await Blog.deleteMany({});
-    await Blog.insertMany(blogs);
+    await Blog.insertMany(BLOGS);
 });
 
 describe('HTTP GET', () => {
@@ -45,7 +45,7 @@ describe('HTTP GET', () => {
 
     test('returns the correct amount of blog posts', async () => {
         const fetchedBlogs = await helper.getBlogs();
-        assert.strictEqual(fetchedBlogs.length, blogs.length);
+        assert.strictEqual(fetchedBlogs.length, BLOGS.length);
     });
 
     test('unique identifier of the blog posts is named id', async () => {

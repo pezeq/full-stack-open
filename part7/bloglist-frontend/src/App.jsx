@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import LoginForm from './components/LoginForm';
+import { useAlert } from './hooks/useAlert';
 import LoggedIn from './components/LoggedIn';
+import LoggedOut from './components/LoggedOut';
 import Alert from './components/Alert';
 import blogService from './services/blogService.js';
 import loginService from './services/loginService.js';
-import { useAlert } from './hooks/useAlert';
+import userService from './services/userService.js';
 
 const App = () => {
     const [blogs, setBlogs] = useState([]);
@@ -43,8 +44,8 @@ const App = () => {
             setUser(loggedUser);
             pushAlert(`User '${loggedUser.username}' has been logged in`, 'success');
         } catch (err) {
-            console.error('Error log in user:', err.response?.data);
-            pushAlert(`Error log in user: ${err.response?.data?.message}`);
+            console.error('Error logging in user:', err.response?.data);
+            pushAlert(`Error logging in user: ${err.response?.data?.message}`);
         }
     };
 
@@ -88,6 +89,19 @@ const App = () => {
         }
     };
 
+    const handleCreateUser = async (userInfo) => {
+        try {
+            await userService.createUser(userInfo);
+            await handleLogin({
+                username: userInfo.username,
+                password: userInfo.password,
+            });
+        } catch (err) {
+            console.error('Error signing up user:', err.response?.data);
+            pushAlert(`Error signing up user: ${err.response?.data?.message}`);
+        }
+    };
+
     return (
         <main>
             <Alert
@@ -106,8 +120,9 @@ const App = () => {
                             blogFormRef={blogFormRef}
                         />
                     ) : (
-                        <LoginForm
+                        <LoggedOut
                             handleLogin={handleLogin}
+                            handleCreateUser={handleCreateUser}
                         />
                     )
                 }
