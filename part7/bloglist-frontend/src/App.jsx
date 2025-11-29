@@ -42,7 +42,10 @@ const App = () => {
             storeLogin(loggedUser);
             blogService.setToken(loggedUser.token);
             setUser(loggedUser);
-            pushAlert(`User '${loggedUser.username}' has been logged in`, 'success');
+            pushAlert(
+                `User '${loggedUser.username}' has been logged in`,
+                'success'
+            );
         } catch (err) {
             console.error('Error logging in user:', err.response?.data);
             pushAlert(`Error logging in user: ${err.response?.data?.message}`);
@@ -57,11 +60,16 @@ const App = () => {
         blogFormRef.current.toggleVisibility();
         try {
             const createdBlog = await blogService.createNew(newBlog);
-            pushAlert(`A new blog '${createdBlog.title}' has been created`, 'success');
+            pushAlert(
+                `A new blog '${createdBlog.title}' has been created`,
+                'success'
+            );
             setFetchBlogs(!fetchBlogs);
         } catch (err) {
             console.error('Error creating new blog:', err.response?.data);
-            pushAlert(`Error creating new blog: ${err.response?.data?.message}`);
+            pushAlert(
+                `Error creating new blog: ${err.response?.data?.message}`
+            );
         }
     };
 
@@ -69,11 +77,16 @@ const App = () => {
         const { id, ...likes } = blogToBeLiked;
         try {
             const updatedBlog = await blogService.updateLikes(id, likes);
-            pushAlert(`Blog '${updatedBlog.title}' has now ${updatedBlog.likes} likes`, 'success');
+            pushAlert(
+                `Blog '${updatedBlog.title}' has now ${updatedBlog.likes} likes`,
+                'success'
+            );
             setFetchBlogs(!fetchBlogs);
         } catch (err) {
             console.error('Error updating blog:', err.response?.data);
-            pushAlert(`Error updating new blog: ${err.response?.data?.message}`);
+            pushAlert(
+                `Error updating new blog: ${err.response?.data?.message}`
+            );
         }
     };
 
@@ -104,28 +117,23 @@ const App = () => {
 
     return (
         <main>
-            <Alert
-                alertMsg={alertMsg}
-                alertType={alertType}
-            />
+            <Alert alertMsg={alertMsg} alertType={alertType} />
             <div>
-                {
-                    user ? (
-                        <LoggedIn
-                            blogs={blogs}
-                            user={user}
-                            handleCreateBlog={handleCreateBlog}
-                            handleLikeIncrease={handleLikeIncrease}
-                            handleRemoveBlog={handleRemoveBlog}
-                            blogFormRef={blogFormRef}
-                        />
-                    ) : (
-                        <LoggedOut
-                            handleLogin={handleLogin}
-                            handleCreateUser={handleCreateUser}
-                        />
-                    )
-                }
+                {user ? (
+                    <LoggedIn
+                        blogs={blogs}
+                        user={user}
+                        handleCreateBlog={handleCreateBlog}
+                        handleLikeIncrease={handleLikeIncrease}
+                        handleRemoveBlog={handleRemoveBlog}
+                        blogFormRef={blogFormRef}
+                    />
+                ) : (
+                    <LoggedOut
+                        handleLogin={handleLogin}
+                        handleCreateUser={handleCreateUser}
+                    />
+                )}
             </div>
         </main>
     );

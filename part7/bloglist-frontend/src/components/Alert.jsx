@@ -21,17 +21,12 @@ const Alert = ({ alertMsg, alertType }) => {
         },
     };
 
-
     const alertStyle = {
         ...typeStyles.base,
-        ...typeStyles[alertType]
+        ...typeStyles[alertType],
     };
 
-    return (
-        <div style={alertStyle}>
-            { alertMsg }
-        </div>
-    );
+    return <div style={alertStyle}>{alertMsg}</div>;
 };
 
 export default Alert;

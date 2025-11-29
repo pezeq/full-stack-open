@@ -8,17 +8,17 @@ const Blog = ({ blog, handleLikeIncrease, handleRemoveBlog, username }) => {
         border: 'solid',
         borderWidth: 1,
         borderRadius: 5,
-        margin: '5px 0px 5px 0px'
+        margin: '5px 0px 5px 0px',
     };
 
     const spanStyle = {
-        display: 'block'
+        display: 'block',
     };
 
     const updateLikes = () => {
         handleLikeIncrease({
             id: blog.id,
-            likes: ++blog.likes
+            likes: ++blog.likes,
         });
     };
 
@@ -28,29 +28,37 @@ const Blog = ({ blog, handleLikeIncrease, handleRemoveBlog, username }) => {
         if (confirm) {
             handleRemoveBlog({
                 id: blog.id,
-                title: blog.title
+                title: blog.title,
             });
         }
     };
 
     return (
         <div>
-            {
-                fullView ? (
-                    <div style={blogStyle}>
-                        <span style={spanStyle}>{blog.title} <button onClick={() => setFullView(!fullView)}>hide</button></span>
-                        <span style={spanStyle}>{blog.url}</span>
-                        <span style={spanStyle}>likes {blog.likes} <button onClick={updateLikes}>like</button></span>
-                        <span style={spanStyle}>{blog.author}</span>
-                        {blog.createdBy.username === username && <button onClick={removeBlog}>remove</button>}
-                    </div>
-                ) : (
-                    <div style={blogStyle}>
-                        {blog.title}, {blog.author}
-                        <button onClick={() => setFullView(!fullView)}>view</button>
-                    </div>
-                )
-            }
+            {fullView ? (
+                <div style={blogStyle}>
+                    <span style={spanStyle}>
+                        {blog.title}{' '}
+                        <button onClick={() => setFullView(!fullView)}>
+                            hide
+                        </button>
+                    </span>
+                    <span style={spanStyle}>{blog.url}</span>
+                    <span style={spanStyle}>
+                        likes {blog.likes}{' '}
+                        <button onClick={updateLikes}>like</button>
+                    </span>
+                    <span style={spanStyle}>{blog.author}</span>
+                    {blog.createdBy.username === username && (
+                        <button onClick={removeBlog}>remove</button>
+                    )}
+                </div>
+            ) : (
+                <div style={blogStyle}>
+                    {blog.title}, {blog.author}
+                    <button onClick={() => setFullView(!fullView)}>view</button>
+                </div>
+            )}
         </div>
     );
 };

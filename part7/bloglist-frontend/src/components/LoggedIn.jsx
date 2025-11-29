@@ -2,7 +2,14 @@ import CreateNewBlog from './CreateNewBlog';
 import Togglable from './Togglable';
 import BlogView from './BlogView';
 
-const LoggedIn = ({ blogs, user, handleCreateBlog, handleLikeIncrease, handleRemoveBlog, blogFormRef }) => {
+const LoggedIn = ({
+    blogs,
+    user,
+    handleCreateBlog,
+    handleLikeIncrease,
+    handleRemoveBlog,
+    blogFormRef,
+}) => {
     const handleLogout = () => {
         window.localStorage.removeItem('storedUser');
         window.location.reload();
@@ -16,9 +23,7 @@ const LoggedIn = ({ blogs, user, handleCreateBlog, handleLikeIncrease, handleRem
                 <button onClick={handleLogout}>logout</button>
             </div>
             <Togglable buttonLabel={'create new blog'} ref={blogFormRef}>
-                <CreateNewBlog
-                    handleCreateBlog={handleCreateBlog}
-                />
+                <CreateNewBlog handleCreateBlog={handleCreateBlog} />
             </Togglable>
             <BlogView
                 blogs={blogs}

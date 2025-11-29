@@ -15,29 +15,22 @@ export default [
             parserOptions: {
                 ecmaVersion: 'latest',
                 ecmaFeatures: { jsx: true },
-                sourceType: 'module'
-            }
+                sourceType: 'module',
+            },
         },
         plugins: {
             react: reactPlugin,
             'react-hooks': reactHooks,
             'react-refresh': reactRefresh,
-            '@stylistic': stylistic
+            '@stylistic': stylistic,
         },
         rules: {
             ...js.configs.recommended.rules,
             ...reactHooks.configs.recommended.rules,
             'react/jsx-uses-react': 'off',
             'react/jsx-uses-vars': 'error',
-            '@stylistic/indent': ['error', 4],
-            '@stylistic/linebreak-style': ['error', 'unix'],
-            '@stylistic/quotes': ['error', 'single'],
-            '@stylistic/semi': ['error', 'always'],
             eqeqeq: 'error',
-            'no-trailing-spaces': 'error',
-            'object-curly-spacing': ['error', 'always'],
-            'arrow-spacing': ['error', { before: true, after: true }],
             'no-console': 'off',
-        }
-    }
+        },
+    },
 ];

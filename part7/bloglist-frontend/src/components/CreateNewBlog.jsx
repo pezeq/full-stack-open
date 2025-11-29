@@ -31,7 +31,8 @@ const CreateNewBlog = ({ handleCreateBlog }) => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                </label><br />
+                </label>
+                <br />
                 <label>
                     author:
                     <input
@@ -40,7 +41,8 @@ const CreateNewBlog = ({ handleCreateBlog }) => {
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
                     />
-                </label><br />
+                </label>
+                <br />
                 <label>
                     url:
                     <input
@@ -49,7 +51,8 @@ const CreateNewBlog = ({ handleCreateBlog }) => {
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                     />
-                </label><br />
+                </label>
+                <br />
                 <button type="submit">create</button>
             </form>
         </div>

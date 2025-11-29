@@ -50,7 +50,9 @@ describe('HTTP GET', () => {
 
     test('unique identifier of the blog posts is named id', async () => {
         const fetchedBlogs = await helper.getBlogs();
-        const every = fetchedBlogs.every((b) => b.hasOwnProperty('id'));
+        const every = fetchedBlogs.every((b) =>
+            Object.prototype.hasOwnProperty.call(b, 'id')
+        );
         assert.ok(every);
     });
 

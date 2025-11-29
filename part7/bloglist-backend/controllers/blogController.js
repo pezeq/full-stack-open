@@ -1,5 +1,5 @@
 const blogService = require('../services/blogService');
-const { userExtractor, asyncHandler } = require('../middlewares');
+const { asyncHandler } = require('../middlewares');
 const validator = require('../utils/validator');
 
 const getAllBlogs = asyncHandler(async (req, res) => {

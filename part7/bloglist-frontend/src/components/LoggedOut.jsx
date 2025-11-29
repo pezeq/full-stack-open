@@ -7,20 +7,18 @@ const LoggedOut = ({ handleLogin, handleCreateUser }) => {
 
     return (
         <div>
-            {
-                currentForm === 'login' &&
+            {currentForm === 'login' && (
                 <LoginForm
                     handleLogin={handleLogin}
                     setCurrentForm={setCurrentForm}
                 />
-            }
-            {
-                currentForm === 'signup' &&
+            )}
+            {currentForm === 'signup' && (
                 <SignUpForm
                     handleCreateUser={handleCreateUser}
                     setCurrentForm={setCurrentForm}
                 />
-            }
+            )}
         </div>
     );
 };

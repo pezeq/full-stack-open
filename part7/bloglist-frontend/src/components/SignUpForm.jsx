@@ -11,7 +11,7 @@ const SignUpForm = ({ handleCreateUser, setCurrentForm }) => {
         handleCreateUser({
             name,
             username,
-            password
+            password,
         });
 
         setName('');
@@ -19,7 +19,7 @@ const SignUpForm = ({ handleCreateUser, setCurrentForm }) => {
         setPassword('');
     };
     const labelStyle = {
-        display: 'block'
+        display: 'block',
     };
 
     return (
@@ -57,9 +57,7 @@ const SignUpForm = ({ handleCreateUser, setCurrentForm }) => {
                     />
                 </label>
                 <button type="submit">create account</button>
-                <button
-                    type="button"
-                    onClick={() => setCurrentForm('login')}>
+                <button type="button" onClick={() => setCurrentForm('login')}>
                     cancel
                 </button>
             </form>
