@@ -1,5 +1,11 @@
-const Alert = ({ alertMsg, alertType }) => {
-    if (!alertMsg) return null;
+import { useSelector } from 'react-redux';
+
+const Alert = () => {
+    const alert = useSelector((s) => s.notification);
+
+    if (!alert) return null;
+
+    const { message, type } = alert;
 
     const typeStyles = {
         base: {
@@ -23,10 +29,10 @@ const Alert = ({ alertMsg, alertType }) => {
 
     const alertStyle = {
         ...typeStyles.base,
-        ...typeStyles[alertType],
+        ...typeStyles[type],
     };
 
-    return <div style={alertStyle}>{alertMsg}</div>;
+    return <div style={alertStyle}>{message}</div>;
 };
 
 export default Alert;

@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+/**
+ * @Deprecated
+ * Use notificationReducer instead.
+ */
 export const useAlert = () => {
     const [alertMsg, setAlertMsg] = useState('');
     const [alertType, setAlertType] = useState('');

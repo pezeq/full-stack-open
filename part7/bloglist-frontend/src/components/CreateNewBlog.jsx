@@ -1,18 +1,26 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { handleCreateBlog } from '../reducers/blogReducer';
 
-const CreateNewBlog = ({ handleCreateBlog }) => {
+const CreateNewBlog = ({ blogFormRef }) => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [url, setUrl] = useState('');
 
+    const dispatch = useDispatch();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        handleCreateBlog({
-            title,
-            author,
-            url,
-        });
+        blogFormRef.current.toggleVisibility();
+
+        dispatch(
+            handleCreateBlog({
+                title,
+                author,
+                url,
+            })
+        );
 
         setTitle('');
         setAuthor('');

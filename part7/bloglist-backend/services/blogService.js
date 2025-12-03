@@ -25,7 +25,7 @@ const createNewBlog = async (title, author, url, user) => {
     user.blogs = user.blogs.concat(createdBlog._id);
     await user.save();
 
-    return createdBlog;
+    return createdBlog.populate('createdBy', { username: 1, id: 1 });
 };
 
 const deleteBlog = async (id, user) => {

@@ -1,23 +1,30 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { handleCreateUser } from '../reducers/userReducer';
 
-const SignUpForm = ({ handleCreateUser, setCurrentForm }) => {
+const SignUpForm = ({ setCurrentForm }) => {
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const dispatch = useDispatch();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        handleCreateUser({
-            name,
-            username,
-            password,
-        });
+        dispatch(
+            handleCreateUser({
+                name,
+                username,
+                password,
+            })
+        );
 
         setName('');
         setUsername('');
         setPassword('');
     };
+
     const labelStyle = {
         display: 'block',
     };

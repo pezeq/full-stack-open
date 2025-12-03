@@ -1,7 +1,14 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    handleLikeIncrease,
+    handleRemoveBlog,
+} from '../reducers/blogReducer.js';
 
-const Blog = ({ blog, handleLikeIncrease, handleRemoveBlog, username }) => {
+const Blog = ({ blog }) => {
     const [fullView, setFullView] = useState(false);
+    const username = useSelector((s) => s.user.username);
+    const dispatch = useDispatch();
 
     const blogStyle = {
         padding: '5px',
@@ -16,20 +23,24 @@ const Blog = ({ blog, handleLikeIncrease, handleRemoveBlog, username }) => {
     };
 
     const updateLikes = () => {
-        handleLikeIncrease({
-            id: blog.id,
-            likes: ++blog.likes,
-        });
+        dispatch(
+            handleLikeIncrease({
+                id: blog.id,
+                likes: blog.likes + 1,
+            })
+        );
     };
 
     const removeBlog = () => {
         const confirm = window.confirm(`Remove blog '${blog.title}'?`);
 
         if (confirm) {
-            handleRemoveBlog({
-                id: blog.id,
-                title: blog.title,
-            });
+            dispatch(
+                handleRemoveBlog({
+                    id: blog.id,
+                    title: blog.title,
+                })
+            );
         }
     };
 

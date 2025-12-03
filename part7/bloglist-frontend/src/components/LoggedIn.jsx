@@ -1,19 +1,17 @@
 import CreateNewBlog from './CreateNewBlog';
 import Togglable from './Togglable';
 import BlogView from './BlogView';
+import { useRef } from 'react';
+import { useSelector } from 'react-redux';
 
-const LoggedIn = ({
-    blogs,
-    user,
-    handleCreateBlog,
-    handleLikeIncrease,
-    handleRemoveBlog,
-    blogFormRef,
-}) => {
+const LoggedIn = () => {
     const handleLogout = () => {
         window.localStorage.removeItem('storedUser');
         window.location.reload();
     };
+
+    const user = useSelector((s) => s.user);
+    const blogFormRef = useRef();
 
     return (
         <div>
@@ -22,15 +20,10 @@ const LoggedIn = ({
                 {user.name ?? user.username} logged in
                 <button onClick={handleLogout}>logout</button>
             </div>
-            <Togglable buttonLabel={'create new blog'} ref={blogFormRef}>
-                <CreateNewBlog handleCreateBlog={handleCreateBlog} />
+            <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+                <CreateNewBlog blogFormRef={blogFormRef} />
             </Togglable>
-            <BlogView
-                blogs={blogs}
-                handleLikeIncrease={handleLikeIncrease}
-                handleRemoveBlog={handleRemoveBlog}
-                username={user.username}
-            />
+            <BlogView />
         </div>
     );
 };

@@ -12,9 +12,11 @@
         "test": "vitest run"
     },
     "dependencies": {
+        "@reduxjs/toolkit": "^2.11.0",
         "axios": "^1.9.0",
         "react": "^19.1.0",
-        "react-dom": "^19.1.0"
+        "react-dom": "^19.1.0",
+        "redux": "^5.0.1"
     },
     "devDependencies": {
         "@eslint/js": "^9.25.0",
@@ -34,5 +36,8 @@
         "prettier": "3.7.2",
         "vite": "^6.3.5",
         "vitest": "^4.0.14"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "4.9.5"
     }
 }

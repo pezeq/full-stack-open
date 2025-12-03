@@ -1,23 +1,17 @@
 import { useState } from 'react';
 import LoginForm from './LoginForm';
-import SignUpForm from './SignUpForm.jsx';
+import SignUpForm from './SignUpForm';
 
-const LoggedOut = ({ handleLogin, handleCreateUser }) => {
+const LoggedOut = () => {
     const [currentForm, setCurrentForm] = useState('login');
 
     return (
         <div>
             {currentForm === 'login' && (
-                <LoginForm
-                    handleLogin={handleLogin}
-                    setCurrentForm={setCurrentForm}
-                />
+                <LoginForm setCurrentForm={setCurrentForm} />
             )}
             {currentForm === 'signup' && (
-                <SignUpForm
-                    handleCreateUser={handleCreateUser}
-                    setCurrentForm={setCurrentForm}
-                />
+                <SignUpForm setCurrentForm={setCurrentForm} />
             )}
         </div>
     );
