@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { handleCreateUser } from '../reducers/userReducer';
+import { handleCreateUser } from '../reducers/loginReducer';
 
 const SignUpForm = ({ setCurrentForm }) => {
     const [name, setName] = useState('');

@@ -35,7 +35,24 @@ const deleteBlog = async (id, user) => {
 };
 
 const updateBlogLikes = async (id, body) => {
-    return Blog.findByIdAndUpdate({ _id: id }, body, { new: true });
+    return Blog.findByIdAndUpdate({ _id: id }, body, { new: true }).populate(
+        'createdBy',
+        { username: 1, id: 1 }
+    );
+};
+
+const newComment = async (id, req) => {
+    const blog = await Blog.findById({ _id: id });
+    blog.comments = blog.comments.concat(req.comment);
+    await blog.save();
+    return blog.populate('createdBy', { username: 1, id: 1 });
+};
+
+const clearComments = async (id) => {
+    const blog = await Blog.findById({ _id: id });
+    blog.comments = [];
+    await blog.save();
+    return blog.populate('createdBy', { username: 1, id: 1 });
 };
 
 module.exports = {
@@ -44,4 +61,6 @@ module.exports = {
     createNewBlog,
     deleteBlog,
     updateBlogLikes,
+    newComment,
+    clearComments,
 };

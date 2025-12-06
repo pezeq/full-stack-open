@@ -57,10 +57,30 @@ const updateBlogLikes = asyncHandler(async (req, res) => {
     res.status(200).json(updatedBlog);
 });
 
+const newComment = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const allowedKeys = ['comment'];
+    validator.hasExtraKey(req.body, allowedKeys);
+
+    const updatedBlog = await blogService.newComment(id, req.body);
+    validator.resourceExists(updatedBlog, 'Blog');
+
+    res.status(200).json(updatedBlog);
+});
+
+const clearComments = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const updatedBlog = await blogService.clearComments(id);
+    res.status(200).json(updatedBlog);
+});
+
 module.exports = {
     getAllBlogs,
     getBlog,
     createNewBlog,
     deleteBlog,
     updateBlogLikes,
+    newComment,
+    clearComments,
 };

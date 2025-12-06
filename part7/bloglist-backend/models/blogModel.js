@@ -22,6 +22,7 @@ const blogSchema = new mongoose.Schema({
         ref: 'User',
     },
     createdAt: Date,
+    comments: [{ type: String }],
 });
 
 blogSchema.set('toJSON', {

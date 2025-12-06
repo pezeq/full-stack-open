@@ -1,27 +1,32 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { initializeBlogs } from './reducers/blogReducer';
-import { initializeUser } from './reducers/userReducer';
+import { initializeLogin } from './reducers/loginReducer';
+import { initializeUsers } from './reducers/userReducer';
+import { Routes, Route } from 'react-router-dom';
 import LoggedIn from './components/LoggedIn';
 import LoggedOut from './components/LoggedOut';
 import Alert from './components/Alert';
 
 const App = () => {
     const dispatch = useDispatch();
-    const user = useSelector((s) => s.user);
+    const user = useSelector((s) => s.loggedUser);
 
     useEffect(() => {
         dispatch(initializeBlogs());
-    }, [dispatch]);
-
-    useEffect(() => {
-        dispatch(initializeUser());
+        dispatch(initializeLogin());
+        dispatch(initializeUsers());
     }, [dispatch]);
 
     return (
         <main>
             <Alert />
-            <div>{user ? <LoggedIn /> : <LoggedOut />}</div>
+            <Routes>
+                <Route
+                    path="/*"
+                    element={user ? <LoggedIn user={user} /> : <LoggedOut />}
+                />
+            </Routes>
         </main>
     );
 };

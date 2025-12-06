@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import blogService from '../services/blogService';
 import { displayNotification } from './notificationReducer';
+import { initializeUsers } from './userReducer';
 
 const blogSlice = createSlice({
     name: 'blogs',
@@ -45,11 +46,12 @@ export const initializeBlogs = () => {
 export const handleCreateBlog = (newBlog) => {
     return async (dispatch) => {
         try {
-            const createdBlog = await blogService.createNew(newBlog);
-            dispatch(appendBlog(createdBlog));
+            const blog = await blogService.createNew(newBlog);
+            dispatch(appendBlog(blog));
+            dispatch(initializeUsers());
             dispatch(
                 displayNotification({
-                    message: `A new blog '${createdBlog.title}' has been created`,
+                    message: `A new blog '${blog.title}' has been created`,
                     type: 'success',
                 })
             );
@@ -69,19 +71,19 @@ export const handleLikeIncrease = (blogToBeLiked) => {
     return async (dispatch) => {
         try {
             const { id, ...likes } = blogToBeLiked;
-            const updatedBlog = await blogService.updateLikes(id, likes);
-            dispatch(updateBlog(updatedBlog));
+            const blog = await blogService.updateLikes(id, likes);
+            dispatch(updateBlog(blog));
             dispatch(
                 displayNotification({
-                    message: `Blog '${updatedBlog.title}' has now ${updatedBlog.likes} likes`,
+                    message: `Blog '${blog.title}' has now ${blog.likes} likes`,
                     type: 'success',
                 })
             );
         } catch (err) {
-            console.error('Error updating blog:', err.response?.data);
+            console.error('Error liking blog:', err.response?.data);
             dispatch(
                 displayNotification({
-                    message: `Error updating new blog: ${err.response?.data?.message}`,
+                    message: `Error liking blog: ${err.response?.data?.message}`,
                     type: 'error',
                 })
             );
@@ -95,6 +97,7 @@ export const handleRemoveBlog = (blogToBeRemoved) => {
             const { id, title } = blogToBeRemoved;
             await blogService.removeBlog(id);
             dispatch(removeBlog(id));
+            dispatch(initializeUsers());
             dispatch(
                 displayNotification({
                     message: `Blog '${title}' has been removed`,
@@ -106,6 +109,30 @@ export const handleRemoveBlog = (blogToBeRemoved) => {
             dispatch(
                 displayNotification({
                     message: `Error removing blog: ${err.response?.data?.message}`,
+                    type: 'error',
+                })
+            );
+        }
+    };
+};
+
+export const handleNewComment = (blogToBeCommented) => {
+    return async (dispatch) => {
+        try {
+            const { id, ...comment } = blogToBeCommented;
+            const blog = await blogService.commentBlog(id, comment);
+            dispatch(updateBlog(blog));
+            dispatch(
+                displayNotification({
+                    message: `A new comment has been added to blog '${blog.title}'`,
+                    type: 'success',
+                })
+            );
+        } catch (err) {
+            console.error('Error commenting blog:', err);
+            dispatch(
+                displayNotification({
+                    message: `Error commenting blog: ${err.response?.data?.message}`,
                     type: 'error',
                 })
             );

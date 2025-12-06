@@ -29,10 +29,17 @@ const removeBlog = async (id) => {
     return res.data;
 };
 
+const commentBlog = async (id, comment) => {
+    console.log('commentBlog', id, comment);
+    const res = await axios.put(`${baseUrl}/${id}/comments`, comment);
+    return res.data;
+};
+
 export default {
     getAll,
     createNew,
     setToken,
     updateLikes,
     removeBlog,
+    commentBlog,
 };
