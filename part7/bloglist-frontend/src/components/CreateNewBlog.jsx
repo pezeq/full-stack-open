@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { handleCreateBlog } from '../reducers/blogReducer';
+import { Button, Form, Stack } from 'react-bootstrap';
 
 const CreateNewBlog = ({ blogFormRef }) => {
     const [title, setTitle] = useState('');
@@ -9,10 +10,14 @@ const CreateNewBlog = ({ blogFormRef }) => {
 
     const dispatch = useDispatch();
 
+    const hide = () => {
+        blogFormRef.current.toggleVisibility();
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        blogFormRef.current.toggleVisibility();
+        hide();
 
         dispatch(
             handleCreateBlog({
@@ -29,40 +34,42 @@ const CreateNewBlog = ({ blogFormRef }) => {
 
     return (
         <div>
-            <h2>create new</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    title:
-                    <input
+            <h2>Create New Blog</h2>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group className="mt-3">
+                    <Form.Label>Title:</Form.Label>
+                    <Form.Control
                         name="title"
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                </label>
-                <br />
-                <label>
-                    author:
-                    <input
+                </Form.Group>
+                <Form.Group className="mt-3">
+                    <Form.Label>Author:</Form.Label>
+                    <Form.Control
                         name="author"
                         type="text"
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
                     />
-                </label>
-                <br />
-                <label>
-                    url:
-                    <input
+                </Form.Group>
+                <Form.Group className="mt-3">
+                    <Form.Label>Blog's link:</Form.Label>
+                    <Form.Control
                         name="url"
                         type="text"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                     />
-                </label>
-                <br />
-                <button type="submit">create</button>
-            </form>
+                </Form.Group>
+                <Stack direction="horizontal" className="mt-3" gap={2}>
+                    <Button onClick={handleSubmit}>Create</Button>
+                    <Button onClick={hide} variant="danger">
+                        Cancel
+                    </Button>
+                </Stack>
+            </Form>
         </div>
     );
 };

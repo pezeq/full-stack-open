@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { handleLogin } from '../reducers/loginReducer';
+import { Form, Button, Stack } from 'react-bootstrap';
 
 const LoginForm = ({ setCurrentForm }) => {
     const [username, setUsername] = useState('');
@@ -22,39 +23,41 @@ const LoginForm = ({ setCurrentForm }) => {
         setPassword('');
     };
 
-    const labelStyle = {
-        display: 'block',
-    };
-
     return (
         <div>
-            <h2>log in to application</h2>
-            <form onSubmit={handleSubmit}>
-                <label style={labelStyle}>
-                    username
-                    <input
+            <h2 className="mt-3">Sign in to BlogApp</h2>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group className="mt-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
                         name="username"
                         type="text"
                         value={username}
                         autoComplete="username"
                         onChange={(e) => setUsername(e.target.value)}
                     />
-                </label>
-                <label style={labelStyle}>
-                    password
-                    <input
+                </Form.Group>
+                <Form.Group className="mt-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
                         name="password"
                         type="password"
                         value={password}
                         autoComplete="current-password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                </label>
-                <button type="submit">login</button>
-                <button type="button" onClick={() => setCurrentForm('signup')}>
-                    create account
-                </button>
-            </form>
+                </Form.Group>
+                <Stack direction="horizontal" className="mt-3" gap={2}>
+                    <Button type="submit">Login</Button>
+                    <Button
+                        type="button"
+                        variant="info"
+                        onClick={() => setCurrentForm('signup')}
+                    >
+                        Create Account
+                    </Button>
+                </Stack>
+            </Form>
         </div>
     );
 };

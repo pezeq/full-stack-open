@@ -36,7 +36,7 @@ export const initializeBlogs = () => {
             dispatch(
                 displayNotification({
                     message: 'Error fetching blogs',
-                    type: 'error',
+                    type: 'danger',
                 })
             );
         }
@@ -60,7 +60,7 @@ export const handleCreateBlog = (newBlog) => {
             dispatch(
                 displayNotification({
                     message: `Error creating new blog: ${err.response?.data?.message}`,
-                    type: 'error',
+                    type: 'danger',
                 })
             );
         }
@@ -73,6 +73,7 @@ export const handleLikeIncrease = (blogToBeLiked) => {
             const { id, ...likes } = blogToBeLiked;
             const blog = await blogService.updateLikes(id, likes);
             dispatch(updateBlog(blog));
+            dispatch(initializeUsers());
             dispatch(
                 displayNotification({
                     message: `Blog '${blog.title}' has now ${blog.likes} likes`,
@@ -84,7 +85,7 @@ export const handleLikeIncrease = (blogToBeLiked) => {
             dispatch(
                 displayNotification({
                     message: `Error liking blog: ${err.response?.data?.message}`,
-                    type: 'error',
+                    type: 'danger',
                 })
             );
         }
@@ -109,7 +110,7 @@ export const handleRemoveBlog = (blogToBeRemoved) => {
             dispatch(
                 displayNotification({
                     message: `Error removing blog: ${err.response?.data?.message}`,
-                    type: 'error',
+                    type: 'danger',
                 })
             );
         }
@@ -122,6 +123,7 @@ export const handleNewComment = (blogToBeCommented) => {
             const { id, ...comment } = blogToBeCommented;
             const blog = await blogService.commentBlog(id, comment);
             dispatch(updateBlog(blog));
+            dispatch(initializeUsers());
             dispatch(
                 displayNotification({
                     message: `A new comment has been added to blog '${blog.title}'`,
@@ -133,7 +135,7 @@ export const handleNewComment = (blogToBeCommented) => {
             dispatch(
                 displayNotification({
                     message: `Error commenting blog: ${err.response?.data?.message}`,
-                    type: 'error',
+                    type: 'danger',
                 })
             );
         }

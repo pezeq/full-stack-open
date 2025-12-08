@@ -11,6 +11,7 @@ const login = async (user) => {
 
     return {
         token,
+        id: user._id,
         username: user.username,
         name: user.name,
     };

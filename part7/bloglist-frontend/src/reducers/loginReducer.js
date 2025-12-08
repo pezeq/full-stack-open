@@ -38,7 +38,7 @@ export const handleLogin = (credentials) => {
             dispatch(
                 displayNotification({
                     message: `Error logging in user: ${err.response?.data?.message}`,
-                    type: 'error',
+                    type: 'danger',
                 })
             );
         }
@@ -71,7 +71,7 @@ export const handleCreateUser = (userInfo) => {
             dispatch(
                 displayNotification({
                     message: `Error signing up user: ${err.response?.data?.message}`,
-                    type: 'error',
+                    type: 'danger',
                 })
             );
         }
